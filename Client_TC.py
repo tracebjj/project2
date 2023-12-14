@@ -7,7 +7,7 @@ from platform import system
 import PySimpleGUI as sg
 
 def Get_Pi_Data():
-"""Function to retrieve the pi data each iteration or whenever called"""
+    """Function to retrieve the pi data each iteration or whenever called"""
     core_temp = os.popen('vcgencmd measure_temp').readline().strip()  # Get the core temperature
     gpu_core_speed = os.popen('vcgencmd measure_clock core').readline().strip()  # Get the GPU core speed
     hdmi_clock = os.popen('vcgencmd measure_clock hdmi').readline().strip()  # Get the HDMI clock
@@ -38,10 +38,9 @@ if __name__ == "__main__":
     if system() != "Linux": # Used the platform library to import system, if it isn't Linux it exits
         print("Not on Raspberry Pi, goodbye.")
     else:
-        host = '127.0.0.1'
+        host = '127.0.0.1' # Loopback ip
         port = 8000
-        max_iterations = 50
-
+        
         try:
             s = socket.socket()
             s.connect((host, port))
@@ -55,7 +54,7 @@ if __name__ == "__main__":
             window = sg.Window('Client GUI', layout, finalize=True)
 
             try:
-                for iteration in range(1, max_iterations + 1):
+                for iteration in range(1, 51):
                     data = Collate_Data(iteration)
                     s.send(data.encode())
 
@@ -65,13 +64,13 @@ if __name__ == "__main__":
                 s.close()
                 print("Data sent successfully. Exiting.")
 
-            except socket.error as e:
-                print(f"Error: {e}")
-                print("Exiting gracefully.")
+            except socket.error as err: # Catches and exits without ugly messages
+                print(f"Error: {err}")
+                print("Goodbye.")
 
             finally:
                 window.close()
 
-        except Exception as e:
-            print(f"Error: {e}")
+        except Exception as err:
+            print(f"Error: {err}")
             print("Goodbye.")
