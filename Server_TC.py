@@ -21,7 +21,7 @@ def Update_GUI(window, data): # Updates the GUI sections when needed, a function
     sg.popup_quick_message("Data Received!", auto_close_duration=1)
 
 if __name__ == "__main__":
-    host = '127.0.0.1'
+    host = '10.102.13.77'
     port = 8000
 
     listensocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
