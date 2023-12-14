@@ -1,3 +1,6 @@
+# Trace Carter - 100865857
+# TPRG Project 2
+# Server/Client Project
 import os
 import socket
 import json
@@ -60,11 +63,11 @@ if __name__ == "__main__":
             window = sg.Window('Client GUI', layout, finalize=True)
 
             try:
-                for iteration in range(1, 51):
+                for iteration in range(50):
                     data = Collate_Data(iteration)
                     s.send(data.encode())
 
-                    event, values = window.read(timeout=2000)  # Used timeout to check GUI every 2 seconds
+                    event, values = window.read(timeout=2000)  # Timeout to check GUI every 2 seconds
                     window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggles between led modes, '🟢' and '◌'
 
                 s.close()
@@ -75,8 +78,8 @@ if __name__ == "__main__":
                 print("Goodbye.")
 
             finally:
-                window.close()
+                window.close() # Close GUI
 
         except Exception as err:
             print(f"Error: {err}")
-            print("Goodbye.")
+            print("Goodbye.") # Signoff
