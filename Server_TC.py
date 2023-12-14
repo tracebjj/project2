@@ -2,16 +2,18 @@ import socket
 import json
 import PySimpleGUI as sg
 
-def parse_data(data): # Function to be run during iterations, parses incoming data
+def parse_data(data):
+    """Function to be run during iterations, parses incoming data"""
     return json.loads(data)
 
 def Update_GUI(window, data): # Updates the GUI sections when needed, a function so it happens every iteration
+    """Updates GUI elements when called each iteration"""
     window['-CORE_TEMP-'].update(f"Core Temperature: {data[0]}°C")
     window['-GPU_CORE_SPEED-'].update(f"GPU Core Speed: {data[1]}Hz")
     window['-HDMI_CLOCK-'].update(f"HDMI Clock: {data[2]}Hz")
     window['-RAM_IO_VOLTAGE-'].update(f"RAM I/O Voltage: {data[3]}V")
     window['-SD_CARD_SPEED-'].update(f"SD Card Interface Speed: {data[4]}Hz")
-    window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggle between '🟢' and '◌'
+    window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggle between '🟢' and '◌' LED modes
     sg.popup_quick_message("Data Received!", auto_close_duration=1)
 
 if __name__ == "__main__":
