@@ -6,9 +6,8 @@ import time
 from platform import system
 import PySimpleGUI as sg
 
-
-def get_pi_data():
-
+def Get_Pi_Data():
+"""Function to retrieve the pi data each iteration or whenever called"""
     core_temp = os.popen('vcgencmd measure_temp').readline().strip()  # Get the core temperature
     gpu_core_speed = os.popen('vcgencmd measure_clock core').readline().strip()  # Get the GPU core speed
     hdmi_clock = os.popen('vcgencmd measure_clock hdmi').readline().strip()  # Get the HDMI clock
@@ -29,52 +28,50 @@ def get_pi_data():
         'sd_card_speed': sd_card_speed_value
     }
 
-def collate_data(iteration_count):
-    pi_data = get_pi_data()
+def Collate_Data(iteration_count):
+    """Collates and arranges the pi data, in function form to be called each iteration"""
+    pi_data = Get_Pi_Data()
     pi_data['iteration_count'] = iteration_count
     return json.dumps(list(pi_data.values()))
-
-def main():
-    host = '127.0.0.1'
-    port = 8000
-    max_iterations = 50
-
-    try:
-        s = socket.socket()
-        s.connect((host, port))
-
-        sg.theme('DarkGreen')
-        layout = [
-            [sg.Text('LED:'), sg.Text('◌', key='-LED-', font=('Arial', 16))],  # Unicode LED stand-in (U+25CC), LED off
-            [sg.Button('Exit')]
-        ]
-
-        window = sg.Window('Client GUI', layout, finalize=True)
-
-        try:
-            for iteration in range(1, max_iterations + 1):
-                data = collate_data(iteration)
-                s.send(data.encode())
-
-                event, values = window.read(timeout=2000)  # Used timeout to check GUI every 2 seconds
-                window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggles between led modes, '🟢' and '◌'
-
-            s.close()
-            print("Data sent successfully. Exiting.")
-
-        except socket.error as e:
-            print(f"Error: {e}")
-            print("Exiting gracefully.")
-
-        finally:
-            window.close()
-
-    except Exception as e:
-        print(f"Error: {e}")
-        print("Goodbye.")
 
 if __name__ == "__main__":
     if system() != "Linux": # Used the platform library to import system, if it isn't Linux it exits
         print("Not on Raspberry Pi, goodbye.")
     else:
-        main()
+        host = '127.0.0.1'
+        port = 8000
+        max_iterations = 50
+
+        try:
+            s = socket.socket()
+            s.connect((host, port))
+
+            sg.theme('DarkGreen')
+            layout = [
+                [sg.Text('LED:'), sg.Text('◌', key='-LED-', font=('Arial', 16))],  # Unicode LED stand-in (U+25CC), LED off
+                [sg.Button('Exit')]
+            ]
+
+            window = sg.Window('Client GUI', layout, finalize=True)
+
+            try:
+                for iteration in range(1, max_iterations + 1):
+                    data = Collate_Data(iteration)
+                    s.send(data.encode())
+
+                    event, values = window.read(timeout=2000)  # Used timeout to check GUI every 2 seconds
+                    window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggles between led modes, '🟢' and '◌'
+
+                s.close()
+                print("Data sent successfully. Exiting.")
+
+            except socket.error as e:
+                print(f"Error: {e}")
+                print("Exiting gracefully.")
+
+            finally:
+                window.close()
+
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Goodbye.")
