@@ -1,3 +1,6 @@
+# Trace Carter - 100865857
+# TPRG Project 2
+# Server/Client Project
 import socket
 import json
 import PySimpleGUI as sg
@@ -57,8 +60,8 @@ if __name__ == "__main__":
             data = Parse_Data(message)
             Update_GUI(window, data)
 
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception as err:
+        print(f"Error: {err}")
 
     finally: # Close if succesful
         if clientsocket:
