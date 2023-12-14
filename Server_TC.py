@@ -63,6 +63,6 @@ if __name__ == "__main__":
     finally: # Close if succesful
         if clientsocket:
             clientsocket.close()
-
+        print("Goodbye.")
         listensocket.close()
         window.close()
