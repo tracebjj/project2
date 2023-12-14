@@ -2,7 +2,7 @@ import socket
 import json
 import PySimpleGUI as sg
 
-def parse_data(data):
+def Parse_Data(data):
     """Function to be run during iterations, parses incoming data"""
     return json.loads(data)
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     print(f"Server listening on {host}:{port}")
 
     sg.theme('DarkRed') # Dark Red to go with the other green GUI
-    #Sets up the GUI layout
+    #Sets up the GUI layout | 40 width because 20 was too narrow
     layout = [
         [sg.Text('', key='-CORE_TEMP-', size=(40, 1))],
         [sg.Text('', key='-GPU_CORE_SPEED-', size=(40, 1))],
@@ -40,9 +40,9 @@ if __name__ == "__main__":
 
 
 
-    window = sg.Window('Server GUI', layout, finalize=True)
+    window = sg.Window('Server GUI', layout, finalize=True) # Finalize because GUI was getting mad without it
 
-    try:
+    try: # Connection
         clientsocket, addr = listensocket.accept()
         print('Got connection from', addr)
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {e}")
 
-    finally:
+    finally: # Close if succesful
         if clientsocket:
             clientsocket.close()
 
