@@ -13,6 +13,7 @@ def Update_GUI(window, data): # Updates the GUI sections when needed, a function
     window['-HDMI_CLOCK-'].update(f"HDMI Clock: {data[2]}Hz")
     window['-RAM_IO_VOLTAGE-'].update(f"RAM I/O Voltage: {data[3]}V")
     window['-SD_CARD_SPEED-'].update(f"SD Card Interface Speed: {data[4]}Hz")
+    window['-PIXEL_VALUES-'].update(f"Pixel Values: {data[5]}Hz")
     window['-LED-'].update('🟢' if window['-LED-'].get() == '◌' else '◌')  # Toggle between '🟢' and '◌' LED modes
     sg.popup_quick_message("Data Received!", auto_close_duration=1)
 
@@ -34,6 +35,7 @@ if __name__ == "__main__":
         [sg.Text('', key='-HDMI_CLOCK-', size=(40, 1))],
         [sg.Text('', key='-RAM_IO_VOLTAGE-', size=(40, 1))],
         [sg.Text('', key='-SD_CARD_SPEED-', size=(40, 1))],
+        [sg.Text('', key='-PIXEL_VALUES-', size=(40, 1))],
         [sg.Text('LED:'), sg.Text('◌', key='-LED-', font=('Arial', 16))],
         [sg.Button('Exit')]
     ]
@@ -52,7 +54,7 @@ if __name__ == "__main__":
             if not message:
                 break
 
-            data = parse_data(message)
+            data = Parse_Data(message)
             Update_GUI(window, data)
 
     except Exception as e:
